@@ -1,0 +1,9 @@
+MONO_DB_CONNECTION_STRING=mongodb://localhost:27017/shopify
+API_EXT=https://1d12-190-142-232-40.ngrok.io
+SHOP=node-api-store.myshopify.com
+API_KEY=2970cc1a5d8d3ec18e99a92d11a7938f
+API_SECRET_KEY=eb6074af33f2b44d27fb7b3460cfc12f
+SCOPES=read_products,write_products
+HOST=1d12-190-142-232-40.ngrok.io
+HOST_SCHEME=https
+TOKEN_SECRET_KEY=shopify

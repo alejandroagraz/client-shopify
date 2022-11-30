@@ -1,0 +1,57 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserType {
+  _id: ID!
+  email: String!
+  username: String!
+  privateKey: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AuthType {
+  access_token: String!
+}
+
+type ProductType {
+  _id: ID!
+  name: String
+  description: String
+  image: String
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Query {
+  getUsers: [UserType!]!
+  getProducts: [ProductType!]!
+}
+
+type Mutation {
+  createUser(input: UserInput!): UserType!
+  authenticateUser(input: AuthInput!): AuthType!
+  searchProducts(input: SearchProductInput!): [ProductType!]!
+}
+
+input UserInput {
+  email: String!
+  password: String!
+  username: String!
+  privateKey: String
+}
+
+input AuthInput {
+  username: String!
+  password: String!
+}
+
+input SearchProductInput {
+  search: String!
+}

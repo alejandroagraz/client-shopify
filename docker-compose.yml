@@ -1,0 +1,94 @@
+version: '3.7'
+
+services:
+  database:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "${PORT_BD}:${PORT_BD}"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONG_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+      command: mongod--auth
+    networks:
+      - shopify
+
+  mongo-seed:
+    build:
+      context: ./docker-files/mongo
+      dockerfile: Dockerfile
+      args:
+        USERNAME: ${MONGO_USERNAME}
+        PASSWORD: ${MONG_PASSWORD}
+        DATABASE: ${MONG_PASSWORD}
+    networks:
+      - shopify
+    depends_on:
+      - database
+
+  api-client:
+    build:
+      context: ./projects/client-shopify-express
+      dockerfile: Dockerfile
+    env_file: .env
+    container_name: ${PROJECTNAME_EXPRESS}-${JOB_BASE_NAME}
+    image: server/${PROJECTNAME_EXPRESS}
+    ports:
+      - "${PORT_LOCAL_EXPRESS}:${PORT_LOCAL_EXPRESS}"
+    volumes:
+      - ./projects/client-shopify-express:/app
+    networks:
+      - shopify
+    depends_on:
+      - mongo-seed
+
+  ngrok:
+    image: ngrok/ngrok
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_TOKEN}
+    command: "http api-client:${PORT_LOCAL_EXPRESS}"
+    ports:
+      - "${PORT_NGROK}:${PORT_NGROK}"
+    networks:
+      - shopify
+    depends_on:
+      - api-client
+
+  app-server:
+    build:
+      context: ./projects/backend-nest
+      dockerfile: Dockerfile
+    env_file: .env
+    container_name: ${PROJECTNAME_NEST}-${JOB_BASE_NAME}
+    image: server/${PROJECTNAME_NEST}
+    ports:
+      - "${PORT_LOCAL_NEST}:${PORT_LOCAL_NEST}"
+    volumes:
+      - ./projects/backend-nest:/usr/src/app
+    networks:
+      - shopify
+    depends_on:
+      - mongo-seed
+      - api-client
+
+  app-client:
+    build:
+      context: ./projects/frontend-react
+      dockerfile: Dockerfile
+    env_file: .env
+    container_name: ${PROJECTNAME_FRONTEND}-${JOB_BASE_NAME}
+    image: server/${PROJECTNAME_FRONTEND}
+    ports:
+      - "${PORT_LOCAL_FRONTEND}:80"
+    volumes:
+      - ./projects/frontend-react:/usr/src/app
+    networks:
+      - shopify
+    depends_on:
+      - app-server
+
+networks:
+  shopify:
+    external: true
