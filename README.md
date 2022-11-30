@@ -25,6 +25,14 @@
 
 *  These instructions will allow you to obtain a copy of the running project on your local machine for development and testing purposes.
 
+## Usage
+### Starter files
+Clone the `starter-files` branch with the following command:
+
+```bash
+git clone https://github.com/alejandroagraz/client-shopify.git
+```
+
 #### Directory Structure
 ```diff
 
