@@ -1,7 +1,7 @@
 [{
-  "email": "joseagraz29@gmail.com",
+  "email": "admin@gmail.com",
   "password": "$2b$10$.PPCcjghrs/GMnQbzxBnCO1vrAnJ9Tc.YrmigTpDFMe/q7076CfaO",
-  "username": "jagraz29",
+  "username": "admin",
   "private_key" : "$2b$10$V/n6ptBpWAwmWwOXwSMViOgBg/uYTeVCizhZpzmgxRoDrRXTMHe8i",
   "createdAt": {
     "$date": "2022-11-28T22:00:37.578Z"
