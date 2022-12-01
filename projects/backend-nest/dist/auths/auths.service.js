@@ -50,6 +50,7 @@ let AuthsService = class AuthsService {
             username: userDto.username,
             email: userDto.email,
         };
+        await this.productsRepository.generateDataApi(userDto);
         authType.access_token = this.jwtService.sign(payload);
         return authType;
     }
