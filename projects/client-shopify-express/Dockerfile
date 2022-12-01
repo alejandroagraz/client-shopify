@@ -8,7 +8,7 @@ RUN apk add nano
 
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN yarn install --only=development
+RUN yarn install
 COPY . .
 
 EXPOSE 4200
