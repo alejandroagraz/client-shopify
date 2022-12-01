@@ -14,10 +14,4 @@ export class UsersResolver {
   async getUsers() {
     return this.usersService.findAll();
   }
-
-  @Mutation(() => UserType)
-  @UseGuards(JwtAuthGuard)
-  async createUser(@Args('input') input: UserInput) {
-    return this.usersService.create(input);
-  }
 }

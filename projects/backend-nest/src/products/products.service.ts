@@ -1,4 +1,4 @@
-import { FilterQuery, Model, UpdateQuery } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import {IProduct} from "./interfaces/product.interface";
 import {ProductInput} from "./inputs/product.input";
@@ -13,13 +13,15 @@ export class ProductsService {
   }
 
   async find(query: FilterQuery<IProduct>): Promise<IProduct[]> {
-    const resp = await this.productModel.find(query).sort({ created_at: -1 }).exec();
-    return resp
+    return await this.productModel.find(query).sort({ created_at: -1 }).exec();
   }
 
   async findAll(): Promise<IProduct[]> {
-    const data = await this.productModel.find().exec()
-    return data;
+    return await this.productModel.find().exec()
+  }
+
+  async count(): Promise<Number> {
+    return await this.productModel.count().exec()
   }
 
 }

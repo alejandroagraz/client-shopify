@@ -42,10 +42,10 @@ AuthsModule = __decorate([
             jwt_strategy_1.JwtStrategy,
             auths_service_1.AuthsService,
             users_service_1.UsersService,
-            product_repository_1.ProductsRepository,
             products_service_1.ProductsService,
+            product_repository_1.ProductsRepository,
             ...users_providers_1.usersProviders,
-            ...products_providers_1.productsProviders
+            ...products_providers_1.productsProviders,
         ],
         exports: [auths_service_1.AuthsService],
     })

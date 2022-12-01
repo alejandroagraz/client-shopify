@@ -9,24 +9,15 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(@Inject('USER_MODEL') private readonly userModel: Model<IUser>) {}
 
-  async create(createUserDto: UserInput): Promise<IUser> {
-    // Hashear password
-    const salt = await bcrypt.genSalt(10);
-    createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
-    createUserDto.privateKey = await bcrypt.hash(createUserDto.username, salt);
-    const createdUser = new this.userModel(createUserDto);
-    return createdUser.save();
-  }
-
   async find(query: FilterQuery<User>): Promise<IUser[]> {
-    return this.userModel.find(query).exec();
+    return await this.userModel.find(query).exec();
   }
 
   async findAll(): Promise<IUser[]> {
-    return this.userModel.find().exec();
+    return await this.userModel.find().exec();
   }
 
   async findOne(query: FilterQuery<User>): Promise<IUser> {
-    return this.userModel.findOne(query).exec();
+    return await this.userModel.findOne(query).exec();
   }
 }

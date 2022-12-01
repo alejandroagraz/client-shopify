@@ -3,16 +3,10 @@ const moment = require('moment');
 
 module.exports = {
     login: (req, res, next) => {
-        if (!req.body.user_id) {
-            return res.status(200).send({
-                status: 'err',
-                message: 'Please enter a user_id.',
-            });
-        }
         if (!req.body.private_key) {
             return res.status(200).send({
                 status: 'err',
-                message: 'Please enter a private_key_decrypt.',
+                message: 'Please enter a private_key.',
             });
         }
         next();

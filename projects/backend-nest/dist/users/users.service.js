@@ -15,26 +15,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
-const bcrypt = require("bcrypt");
 let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
     }
-    async create(createUserDto) {
-        const salt = await bcrypt.genSalt(10);
-        createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
-        createUserDto.privateKey = await bcrypt.hash(createUserDto.username, salt);
-        const createdUser = new this.userModel(createUserDto);
-        return createdUser.save();
-    }
     async find(query) {
-        return this.userModel.find(query).exec();
+        return await this.userModel.find(query).exec();
     }
     async findAll() {
-        return this.userModel.find().exec();
+        return await this.userModel.find().exec();
     }
     async findOne(query) {
-        return this.userModel.findOne(query).exec();
+        return await this.userModel.findOne(query).exec();
     }
 };
 UsersService = __decorate([

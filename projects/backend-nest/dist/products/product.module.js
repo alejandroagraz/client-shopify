@@ -12,21 +12,18 @@ const axios_1 = require("@nestjs/axios");
 const products_resolver_1 = require("./products.resolver");
 const products_service_1 = require("./products.service");
 const product_repository_1 = require("./repositories/product.repository");
-const products_providers_1 = require("./products.providers");
 const database_module_1 = require("../database/database.module");
+const products_providers_1 = require("./products.providers");
 let ProductModule = class ProductModule {
 };
 ProductModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            database_module_1.DatabaseModule,
-            axios_1.HttpModule
-        ],
+        imports: [database_module_1.DatabaseModule, axios_1.HttpModule],
         providers: [
             products_resolver_1.ProductsResolver,
             products_service_1.ProductsService,
             product_repository_1.ProductsRepository,
-            ...products_providers_1.productsProviders
+            ...products_providers_1.productsProviders,
         ],
     })
 ], ProductModule);

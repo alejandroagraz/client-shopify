@@ -7,4 +7,5 @@ export declare class ProductsService {
     create(createProductDto: ProductInput): Promise<IProduct>;
     find(query: FilterQuery<IProduct>): Promise<IProduct[]>;
     findAll(): Promise<IProduct[]>;
+    count(): Promise<Number>;
 }

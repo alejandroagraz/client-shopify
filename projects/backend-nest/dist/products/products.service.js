@@ -24,12 +24,13 @@ let ProductsService = class ProductsService {
         return createProduct.save();
     }
     async find(query) {
-        const resp = await this.productModel.find(query).sort({ created_at: -1 }).exec();
-        return resp;
+        return await this.productModel.find(query).sort({ created_at: -1 }).exec();
     }
     async findAll() {
-        const data = await this.productModel.find().exec();
-        return data;
+        return await this.productModel.find().exec();
+    }
+    async count() {
+        return await this.productModel.count().exec();
     }
 };
 ProductsService = __decorate([

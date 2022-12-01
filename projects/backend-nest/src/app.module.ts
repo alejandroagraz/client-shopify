@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
-import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseModule } from './database/database.module';
 import { databaseProviders } from './database/database.providers';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthsModule } from './auths/auths.module';
-import * as dotenv from 'dotenv';
+import { ProductModule } from './products/product.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './commands/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -17,11 +18,14 @@ import * as dotenv from 'dotenv';
       autoSchemaFile: './graphql/schema.gql',
       context: ({ req }) => ({ req }),
     }),
-    MongooseModule.forRoot(process.env.MONO_DB_CONNECTION_STRING),
+    ScheduleModule.forRoot(),
+    DatabaseModule,
     UsersModule,
-    AuthsModule
+    AuthsModule,
+    ProductModule,
+    TasksModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ...databaseProviders],
 })
 export class AppModule {}

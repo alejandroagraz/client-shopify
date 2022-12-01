@@ -17,15 +17,15 @@ const mongoose_1 = require("mongoose");
 const common_1 = require("@nestjs/common");
 const axios_1 = require("@nestjs/axios");
 const products_service_1 = require("../products.service");
-const bcrypt = require("bcrypt");
+const Cryptr = require('cryptr');
 let ProductsRepository = class ProductsRepository {
     constructor(productModel, httpService, productsService) {
         this.productModel = productModel;
         this.httpService = httpService;
         this.productsService = productsService;
     }
-    async generateDataApi(userDto) {
-        const products = await this.getDataApi(userDto);
+    async generateDataApi() {
+        const products = await this.getDataApi();
         if (products) {
             const dataDto = products.map(function (resp) {
                 const createDto = {
@@ -33,14 +33,14 @@ let ProductsRepository = class ProductsRepository {
                     description: resp.description,
                     image: resp.images,
                     created_at: resp.created_at,
-                    updated_at: resp.updated_at
+                    updated_at: resp.updated_at,
                 };
                 return createDto;
             });
             for (const data of dataDto) {
                 const resp = await this.productsService.find({
                     name: data.name,
-                    description: data.description
+                    description: data.description,
                 });
                 if (resp.length == 0) {
                     await this.productsService.create(data);
@@ -48,19 +48,21 @@ let ProductsRepository = class ProductsRepository {
             }
         }
     }
-    async getDataApi(userDto) {
-        const hashPrivateKey = await bcrypt.hash(userDto.private_key, 10);
+    async getDataApi() {
+        const hashPrivateKey = await this.encryData(process.env.PRIVATE_KEY);
         const resp = await this.httpService
-            .post(`${process.env.API_EXT}login`, { user_id: userDto._id, private_key: hashPrivateKey })
+            .post(`${process.env.API_EXT}login`, { private_key: hashPrivateKey })
             .toPromise()
             .then((res) => res.data)
             .catch((err) => err);
+        console.log(resp);
         if (resp.status == 'success') {
             const token = resp.data.token;
-            const products = await this.httpService.get(`${process.env.API_EXT}products`, {
+            const products = await this.httpService
+                .get(`${process.env.API_EXT}products`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             })
                 .toPromise()
                 .then((res) => res.data)
@@ -78,6 +80,10 @@ let ProductsRepository = class ProductsRepository {
     }
     async isData() {
         return this.productModel.count();
+    }
+    async encryData(data) {
+        const cryptr = new Cryptr(process.env.SECRET_JWT);
+        return await cryptr.encrypt(data);
     }
 };
 ProductsRepository = __decorate([

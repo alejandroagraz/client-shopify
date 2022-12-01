@@ -9,11 +9,10 @@ import { ProductModule } from '../products/product.module';
 import { ProductsRepository } from '../products/repositories/product.repository';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { HttpModule } from '@nestjs/axios';
-import {usersProviders} from "../users/users.providers";
-import {productsProviders} from "../products/products.providers";
-import {DatabaseModule} from "../database/database.module";
-import {ProductsService} from "../products/products.service";
-import * as dotenv from 'dotenv';
+import { usersProviders } from '../users/users.providers';
+import { productsProviders } from '../products/products.providers';
+import { DatabaseModule } from '../database/database.module';
+import { ProductsService } from '../products/products.service';
 
 @Module({
   imports: [
@@ -32,10 +31,10 @@ import * as dotenv from 'dotenv';
     JwtStrategy,
     AuthsService,
     UsersService,
-    ProductsRepository,
     ProductsService,
+    ProductsRepository,
     ...usersProviders,
-    ...productsProviders
+    ...productsProviders,
   ],
   exports: [AuthsService],
 })

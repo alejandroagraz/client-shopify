@@ -3,12 +3,11 @@
 const express = require('express');
 const router = express.Router();
 const {Shopify, ApiVersion} = require("@shopify/shopify-api");
-const bcrypt = require("bcrypt")
-require('dotenv').config();
 const { sessionStorage } = require("sessionstorage");
 const ShopifyMiddleware = require('../middlewares/shopify.middleware.js');
 const {createToken} = require('../services/token.service');
-const {getUser} = require('../services/shopify.service');
+const {getUser, decrypt} = require('../services/shopify.service');
+require('dotenv').config();
 
 const { API_KEY, API_SECRET_KEY, SCOPES, SHOP, HOST } = process.env;
 
@@ -28,27 +27,21 @@ router.get ('/', async (req, res) => {
 });
 
 router.post('/login', ShopifyMiddleware.login, async (req, res) => {
-    const { private_key, user_id } = req.body;
-    const user = await getUser(user_id)
+    const { private_key } = req.body;
+
+    const decrypPrivateKey = await decrypt(private_key)
+    const user = await getUser(decrypPrivateKey)
 
     if (user) {
-        const isPrivateKeyMatching = await bcrypt.compare(user.private_key, private_key)
-            if (isPrivateKeyMatching){
-                const token = createToken(req.body);
-                return res.status(200).send({
-                    status: 'success',
-                    data : {
-                        id: token.id,
-                        token: token.token_encode,
-                        expiration_date: token.expiration_date
-                    }
-                });
-            } else {
-                return res.status(200).send({
-                    status: 'err',
-                    message: 'private_key is incorrect'
-                });
+        const token = createToken(req.body);
+        return res.status(200).send({
+            status: 'success',
+            data : {
+                id: token.id,
+                token: token.token_encode,
+                expiration_date: token.expiration_date
             }
+        });
     } else {
         return res.status(200).send({
             status: 'error',
@@ -57,7 +50,7 @@ router.post('/login', ShopifyMiddleware.login, async (req, res) => {
     }
 });
 
-router.get('/products', async (req, res) => {
+router.get('/products', ShopifyMiddleware.isLoggedIn, async (req, res) => {
     try {
         const response = []
         const client_session = await Shopify.Utils.loadOfflineSession(SHOP);

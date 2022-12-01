@@ -35,16 +35,8 @@ type Query {
 }
 
 type Mutation {
-  createUser(input: UserInput!): UserType!
   authenticateUser(input: AuthInput!): AuthType!
   searchProducts(input: SearchProductInput!): [ProductType!]!
-}
-
-input UserInput {
-  email: String!
-  password: String!
-  username: String!
-  privateKey: String
 }
 
 input AuthInput {

@@ -1,0 +1,5 @@
+MONO_DB_CONNECTION_STRING=mongodb://root:1234@database:27017/shopify?authSource=admin
+SECRET_JWT=shopify
+API_EXT=https://fae3-190-142-232-40.ngrok.io/
+PRIVATE_KEY=$2b$10$V/n6ptBpWAwmWwOXwSMViOgBg/uYTeVCizhZpzmgxRoDrRXTMHe8i
+TIME_TOKEN=7200s
